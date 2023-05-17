@@ -1,0 +1,100 @@
+source /Users/gunduz/Desktop/Tech-Academy/ta-winconsin-django-codes/.venv/bin/activate
+gunduz@Gunduzs-MacBook-Air ta-winconsin-django-codes % source /Users/gunduz/Desktop/Tech-Academy/ta-winconsin-django-co
+des/.venv/bin/activate
+(.venv) gunduz@Gunduzs-MacBook-Air ta-winconsin-django-codes % python3 manage.py shell
+Python 3.9.6 (default, Oct 18 2022, 12:41:40) 
+[Clang 14.0.0 (clang-1400.0.29.202)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+(InteractiveConsole)
+>>> 
+>>> 
+>>> from stories.models import *
+>>> 
+>>> cat1 = Category.objects.first()
+>>> cat1
+<Category: Travel>
+>>> 
+>>> cat1.title
+'Travel'
+>>> tag1 = Tag.objects.first()
+>>> tag1
+<Tag: Dish>
+>>> 
+>>> 
+>>> admin = User.objects.first()
+>>> admin
+<User: admin>
+>>> admin.username
+'admin'
+>>> 
+>>> 
+>>> recipe3 = Recipe.objects.create(category = cat1, author = admin, title = 'Recipe3', image='recipe3.jpeg',cover_image='cover.jpeg',small_description = 'small desc', description = 'desc')
+>>> 
+>>> 
+>>> recipe3.tags.add(tag1)
+>>> 
+>>> 
+>>> Recipe.objects.all()
+<QuerySet [<Recipe: Recipe #1>, <Recipe: Recipe #2>, <Recipe: Recipe3>]>
+>>> 
+>>> Recipe.objects.all().order_by('-created_at')
+<QuerySet [<Recipe: Recipe3>, <Recipe: Recipe #2>, <Recipe: Recipe #1>]>
+>>> 
+>>> 
+>>> Recipe.objects.all().values()
+<QuerySet [{'id': 3, 'created_at': datetime.datetime(2023, 5, 5, 8, 8, 13, 525933, tzinfo=datetime.timezone.utc), 'updated_at': datetime.datetime(2023, 5, 5, 8, 8, 13, 525981, tzinfo=datetime.timezone.utc), 'category_id': 5, 'author_id': 1, 'title': 'Recipe #1', 'image': 'recipe/recipe_1_lrr5bih.jpeg', 'cover_image': 'recipe/recipe_cover_rTN3MYe.jpeg', 'small_description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse, ipsum tempore?', 'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse, ipsum tempore?'}, {'id': 4, 'created_at': datetime.datetime(2023, 5, 5, 8, 12, 58, 283265, tzinfo=datetime.timezone.utc), 'updated_at': datetime.datetime(2023, 5, 5, 8, 12, 58, 283294, tzinfo=datetime.timezone.utc), 'category_id': 1, 'author_id': 1, 'title': 'Recipe #2', 'image': 'recipe/recipe_2_w0G7u0Y.jpeg', 'cover_image': 'recipe/recipe_cover_xrAp8Fy.jpeg', 'small_description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse, ipsum tempore?', 'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Esse, ipsum tempore?'}, {'id': 6, 'created_at': datetime.datetime(2023, 5, 5, 11, 43, 57, 59689, tzinfo=datetime.timezone.utc), 'updated_at': datetime.datetime(2023, 5, 5, 11, 43, 57, 61930, tzinfo=datetime.timezone.utc), 'category_id': 1, 'author_id': 1, 'title': 'Recipe3', 'image': 'recipe3.jpeg', 'cover_image': 'cover.jpeg', 'small_description': 'small desc', 'description': 'desc'}]>
+>>> 
+>>> 
+>>> Recipe.objects.all().values_list('title')
+<QuerySet [('Recipe #1',), ('Recipe #2',), ('Recipe3',)]>
+>>> Recipe.objects.all().values_list('title', flat = True)
+<QuerySet ['Recipe #1', 'Recipe #2', 'Recipe3']>
+>>> 
+>>> 
+>>> Recipe.objects.all().values_list('author__username')
+<QuerySet [('admin',), ('admin',), ('admin',)]>
+>>> 
+>>> Recipe.objects.all().values_list('author__username').count()
+3
+>>> 
+>>> Recipe.objects.filter(title__contains = 'R'))
+  File "<console>", line 1
+    Recipe.objects.filter(title__contains = 'R'))
+                                                ^
+SyntaxError: unmatched ')'
+>>> Recipe.objects.filter(title__contains = 'R')
+<QuerySet [<Recipe: Recipe #1>, <Recipe: Recipe #2>, <Recipe: Recipe3>]>
+>>> 
+>>> 
+>>> Recipe.objects.filter(title__contains = 'R', description__contains = 'R')
+<QuerySet []>
+>>> Recipe.objects.filter(title__contains = 'R', description__icontains = 'R')
+<QuerySet [<Recipe: Recipe #1>, <Recipe: Recipe #2>]>
+>>> 
+>>> 
+>>> Recipe.objects.filter(models.Q(title__contains = 'R') | models.Q(description__icontains = 'R'))
+<QuerySet [<Recipe: Recipe #1>, <Recipe: Recipe #2>, <Recipe: Recipe3>]>
+>>> 
+>>> 
+>>> 
+>>> x = Recipe.objects.filter(models.Q(title__contains = 'R') | models.Q(description__icontains = 'R'))
+>>> 
+>>> print(x.query)
+SELECT "stories_recipe"."id", "stories_recipe"."created_at", "stories_recipe"."updated_at", "stories_recipe"."category_id", "stories_recipe"."author_id", "stories_recipe"."title", "stories_recipe"."image", "stories_recipe"."cover_image", "stories_recipe"."small_description", "stories_recipe"."description" FROM "stories_recipe" WHERE ("stories_recipe"."title"::text LIKE %R% OR UPPER("stories_recipe"."description"::text) LIKE UPPER(%R%))
+>>> 
+>>> 
+>>> a = Recipe.objects.all()
+>>> 
+>>> print(a.query)
+SELECT "stories_recipe"."id", "stories_recipe"."created_at", "stories_recipe"."updated_at", "stories_recipe"."category_id", "stories_recipe"."author_id", "stories_recipe"."title", "stories_recipe"."image", "stories_recipe"."cover_image", "stories_recipe"."small_description", "stories_recipe"."description" FROM "stories_recipe"
+>>> 
+>>> 
+>>> Recipe.objects.filter(created_at__year__gte=2000)
+<QuerySet [<Recipe: Recipe #1>, <Recipe: Recipe #2>, <Recipe: Recipe3>]>
+>>> 
+>>> 
+>>> Product.objects.filter(price__gte=50, price__lte=500)
+Traceback (most recent call last):
+  File "<console>", line 1, in <module>
+NameError: name 'Product' is not defined
+>>> ]
