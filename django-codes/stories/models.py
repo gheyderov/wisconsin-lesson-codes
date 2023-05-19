@@ -9,6 +9,7 @@ User = get_user_model()
 class Recipe(AbstractModel):
     category = models.ForeignKey('Category', related_name='recipes', on_delete=models.CASCADE, null=True, blank=True)
     tags = models.ManyToManyField('Tag')
+    property_values = models.ManyToManyField('PropertyValue')
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     title = models.CharField('title', max_length=100)
@@ -22,6 +23,38 @@ class Recipe(AbstractModel):
     
     class Meta:
         ordering = '-created_at',
+
+
+class Property(AbstractModel):
+    name = models.CharField('name', max_length=100)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = 'Property'
+        verbose_name_plural = 'Properties'
+
+
+class PropertyValue(AbstractModel):
+    property = models.ForeignKey('Property', on_delete=models.CASCADE, related_name='values')
+    name = models.CharField('name', max_length=100)
+
+    def __str__(self):
+        return self.name
+    
+    class Meta:
+        verbose_name = 'Property Value'
+        verbose_name_plural = 'Property Values'
+
+
+class RecipeReview(AbstractModel):
+    message = models.CharField('message', max_length=255)
+    recipe = models.ForeignKey('Recipe', on_delete=models.CASCADE, related_name='reviews')
+
+    def __str__(self) -> str:
+        return self.recipe.title
+
 
 
 class Category(AbstractModel):
