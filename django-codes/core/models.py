@@ -1,4 +1,5 @@
 from django.db import models
+from core.validators import validate_gmail
 
 # Create your models here.
 
@@ -11,7 +12,7 @@ class AbstractModel(models.Model):
 
 
 class Contact(AbstractModel):
-    name = models.CharField('Adiniz', max_length=100)
+    name = models.CharField('Adiniz', max_length=100, unique=True)
     email = models.EmailField('E-poct', max_length=30)
     subject = models.CharField('Movzu', max_length=100, null=True, blank=True)
     message = models.TextField()
