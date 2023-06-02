@@ -10,7 +10,7 @@ class Recipe(AbstractModel):
     category = models.ForeignKey('Category', related_name='recipes', on_delete=models.CASCADE, null=True, blank=True)
     tags = models.ManyToManyField('Tag')
     property_values = models.ManyToManyField('PropertyValue')
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, related_name='recipes', on_delete=models.CASCADE)
 
     title = models.CharField('title', max_length=100)
     image = models.ImageField('image', upload_to='recipe/')
