@@ -21,8 +21,6 @@ class Recipe(AbstractModel):
     def __str__(self):
         return self.title
     
-    class Meta:
-        ordering = '-created_at',
 
 
 class Property(AbstractModel):
@@ -73,3 +71,13 @@ class Tag(AbstractModel):
 
     def __str__(self):
         return self.title
+    
+
+class Comment(AbstractModel):
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField('content')
+
+    def __str__(self):
+        return self.user.username

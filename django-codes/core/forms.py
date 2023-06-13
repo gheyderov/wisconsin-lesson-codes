@@ -1,6 +1,7 @@
 from typing import Any, Dict
 from django import forms
 from core.models import Contact
+from stories.models import Comment
 
 
 class ContactForm(forms.ModelForm):
@@ -54,3 +55,18 @@ class ContactForm(forms.ModelForm):
             raise forms.ValidationError('Email must be gmail')
         return super().clean()
         
+
+
+class CommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = (
+            'content',
+        )
+        widgets = {
+            'content' : forms.Textarea(attrs={
+                'class' : 'form-control',
+                'placeholder' : 'Your message'
+            }),
+        }

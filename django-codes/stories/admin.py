@@ -5,7 +5,8 @@ from .models import (
     Tag,
     RecipeReview,
     Property,
-    PropertyValue
+    PropertyValue,
+    Comment
 )
 
 # Register your models here.
@@ -15,6 +16,7 @@ class RecipeInlineAdmin(admin.TabularInline):
 
 admin.site.register(Tag)
 admin.site.register(Property)
+admin.site.register(Comment)
 
 admin.site.register(RecipeReview)
 
