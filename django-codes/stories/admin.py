@@ -32,7 +32,12 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     inlines = (RecipeInlineAdmin,)
-    list_display = ['title', 'category', 'author']
+    list_display = ['title', 'category', 'author', 'get_tags']
     list_editable = ['category']
     list_filter = ['category', 'author']
 
+    def get_tags(self, obj):
+        arr = []
+        for tag in obj.tags.all():
+            arr.append(tag.title)
+        return arr

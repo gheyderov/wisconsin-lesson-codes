@@ -1,12 +1,17 @@
 from typing import Any, Dict
+from django.db.models.query import QuerySet
+from django.forms.models import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, HttpResponse
 from .models import Recipe, Category, Tag
 from django.contrib import messages
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.views.generic.edit import FormMixin
 from core.forms import CommentForm
+from stories.forms import RecipeCreateForm
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 # Create your views here.
 
@@ -19,8 +24,17 @@ class RecipeListView(ListView):
     model = Recipe
     context_object_name = 'recipes'
     ordering = ['-created_at']
-    paginate_by = 1
-    # recipe_list
+    paginate_by = 2
+
+    def get_queryset(self) -> QuerySet[Any]:
+        cat_id = self.request.GET.get('category')
+        tag_id = self.request.GET.get('tag')
+        queryset = super().get_queryset()
+        if tag_id:
+            queryset = queryset.filter(tags__id = tag_id)
+        if cat_id:
+            queryset = queryset.filter(category__id = cat_id)
+        return queryset
 
 
 def recipe(request):
@@ -71,6 +85,28 @@ class RecipeDetailView(FormMixin, DetailView):
 
 def create_story(request):
     return render(request, 'create_story.html')
+
+
+class CreateRecipeView(LoginRequiredMixin, CreateView):
+    template_name = 'create_story.html'
+    form_class = RecipeCreateForm
+    # success_url = reverse_lazy('home')
+
+    # def get_success_url(self, **kwargs) -> str:
+    #     return reverse_lazy('recipe_detail', kwargs = {'pk', self.get_object.})
+
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+    
+
+class UpdateRecipeView(LoginRequiredMixin, UpdateView):
+    template_name = 'create_story.html'
+    form_class = RecipeCreateForm
+    model = Recipe
+
+
+    
 
 # def like_post(request, pk):
 #     request.session['liked_posts'] = request.session.get('liked_posts', ' ') + str(pk) + ' '

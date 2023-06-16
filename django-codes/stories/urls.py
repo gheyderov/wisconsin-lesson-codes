@@ -4,7 +4,9 @@ from stories.views import (
     RecipeListView, 
     create_story, 
     RecipeDetailView, 
-    like_post
+    like_post,
+    CreateRecipeView,
+    UpdateRecipeView
     )
 
 urlpatterns = [
@@ -12,5 +14,6 @@ urlpatterns = [
     path('recipe/<int:pk>/', RecipeDetailView.as_view(), name='recipe_detail'),
     path('recipes/', RecipeListView.as_view(), name='recipes'),
     path('like_post/<int:pk>/', like_post, name='like_post'),
-    path('create_story/', create_story, name='create_story'),
+    path('create_story/', CreateRecipeView.as_view(), name='create_story'),
+    path('update_story/<int:pk>/', UpdateRecipeView.as_view(), name='update_story'),
 ]

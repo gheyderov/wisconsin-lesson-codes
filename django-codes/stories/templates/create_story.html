@@ -6,26 +6,43 @@
         <div class="container">
             <div class="row block-9 justify-content-center">
                 <div class="col-md-6 order-md-last d-flex">
-                    <form action="#" class="bg-light p-5 contact-form">
+                    <form action="#" method="post" enctype="multipart/form-data" class="bg-light p-5 contact-form">
+                        {% csrf_token %}
                         <a class="navbar-brand center" href="#">Stories<span>.</span></a>
 
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Title">
+                            <!-- <input type="text" class="form-control" placeholder="Title"> -->
+                            {{ form.title }}
+                            {{ form.title.errors }}
+                        </div>
+                        {{ form.image.label_tag }}
+                        {{ form.image }}
+                        {{ form.image.errors }}
+                        {{ form.cover_image.label_tag }}
+                        {{ form.cover_image }}
+                        {{ form.cover_image.errors }}
+                        <div class="form-group">
+                            <!-- <input type="text" class="form-control" placeholder="Title"> -->
+                            {{ form.small_description }}
+                            {{ form.small_description.errors }}
                         </div>
                         <div class="form-group">
-                            <textarea rows="10" class="form-control" placeholder="Description"></textarea>
+                            <!-- <input type="text" class="form-control" placeholder="Title"> -->
+                            {{ form.description }}
+                            {{ form.description.errors }}
                         </div>
                         <div class="form-group">
-                            <select class="form-control" name="" id="">
-                                    <option value="0">Select category</option>
-                                    <option value="1">-----</option>
-                                
-                                </select>
+                            <!-- <input type="text" class="form-control" placeholder="Title"> -->
+                            {{ form.category }}
+                            {{ form.category.errors }}
+                        </div>
+                        <div class="form-group">
+                            <!-- <input type="text" class="form-control" placeholder="Title"> -->
+                            {{ form.tags }}
+                            {{ form.tags.errors }}
                         </div>
 
-                        <div class="form-group">
-                            <input type="file">
-                        </div>
+                        
                         <div class="form-group">
                             <input type="submit" value="Create" class="btn btn-primary py-3 px-5">
                         </div>

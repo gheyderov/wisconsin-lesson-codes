@@ -1,6 +1,7 @@
 from django.db import models
 from core.models import AbstractModel
 from django.contrib.auth import get_user_model
+from django.urls import reverse_lazy
 
 User = get_user_model()
 
@@ -9,7 +10,6 @@ User = get_user_model()
 class Recipe(AbstractModel):
     category = models.ForeignKey('Category', related_name='recipes', on_delete=models.CASCADE, null=True, blank=True)
     tags = models.ManyToManyField('Tag')
-    property_values = models.ManyToManyField('PropertyValue')
     author = models.ForeignKey(User, related_name='recipes', on_delete=models.CASCADE)
 
     title = models.CharField('title', max_length=100)
@@ -17,6 +17,9 @@ class Recipe(AbstractModel):
     cover_image = models.ImageField('cover_image', upload_to='recipe/')
     small_description = models.CharField('small_description', max_length=155)
     description = models.TextField()
+
+    def get_absolute_url(self, **kwargs):
+        return reverse_lazy('recipe_detail', kwargs = {'pk': self.id})
 
     def __str__(self):
         return self.title
