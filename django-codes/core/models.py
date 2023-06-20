@@ -23,3 +23,6 @@ class Contact(AbstractModel):
     def __str__(self) -> str:
         return self.name
 
+
+class BlockedIps(AbstractModel):
+    ip_address = models.GenericIPAddressField()

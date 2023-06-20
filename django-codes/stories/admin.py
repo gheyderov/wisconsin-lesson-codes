@@ -35,6 +35,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = ['title', 'category', 'author', 'get_tags']
     list_editable = ['category']
     list_filter = ['category', 'author']
+    readonly_fields = ['slug']
 
     def get_tags(self, obj):
         arr = []
