@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static tags %}
+{% load i18n %}
 
 {% block title %}
 <title>Food Stories</title>
@@ -21,7 +22,7 @@
 
                     <div class="text d-flex align-items-center ftco-animate">
                         <div class="text-2 pb-lg-5 mb-lg-4 px-4 px-md-5">
-                            <h3 class="subheading mb-3">Featured Posts</h3>
+                            <h3 class="subheading mb-3">{% trans 'Featured Posts' %}</h3>
                             <h1 class="mb-5">Love the Delicious &amp; Tasty Foods</h1>
                             <p class="mb-md-5">A small river named Duden flows by their place and supplies it with the necessary regelialia</p>
                             <p><a href="#" class="btn btn-black px-3 px-md-4 py-3">Read More <span

@@ -8,6 +8,7 @@ from .models import (
     PropertyValue,
     Comment
 )
+from modeltranslation.admin import TranslationAdmin
 
 # Register your models here.
 
@@ -25,12 +26,12 @@ class PropertyValueAdmin(admin.ModelAdmin):
     list_display = ['name', 'property']
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(TranslationAdmin):
     list_display = ['id', 'title']
     list_editable = ['title']
 
 @admin.register(Recipe)
-class RecipeAdmin(admin.ModelAdmin):
+class RecipeAdmin(TranslationAdmin):
     inlines = (RecipeInlineAdmin,)
     list_display = ['title', 'category', 'author', 'get_tags']
     list_editable = ['category']
