@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as django_login, logout as django_logout
 from django.contrib.auth.decorators import login_required
 from stories.models import Recipe
+from django.contrib.auth.views import LoginView
 
 
 from django.contrib.sites.shortcuts import get_current_site
@@ -38,6 +39,12 @@ def login(request):
         'form': form
     }
     return render(request, 'login.html', context)
+
+
+class UserLoginView(LoginView):
+    template_name = 'login.html'
+    form_class = LoginForm
+
 
 
 def register(request):

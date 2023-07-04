@@ -8,6 +8,10 @@ class User(AbstractUser):
     bio = models.CharField('bio', max_length=150, null=True, blank=True)
     image = models.ImageField('image', upload_to='media/user_profile', null=True, blank=True)
     ips = ArrayField(models.GenericIPAddressField(), null=True, blank=True)
+    email = models.EmailField(blank=True, unique=True)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = "username",
 
 
     def get_avatar(self):

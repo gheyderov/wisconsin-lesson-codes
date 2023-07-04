@@ -1,6 +1,7 @@
 from typing import Any, Dict
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AuthenticationForm, UsernameField
 
 User = get_user_model()
 
@@ -59,8 +60,8 @@ class RegisterForm(forms.ModelForm):
         return user
     
 
-class LoginForm(forms.Form):
-    username = forms.CharField(max_length=40, widget=forms.TextInput(attrs={
+class LoginForm(AuthenticationForm):
+    username = UsernameField(max_length=40, widget=forms.TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Username',
                
