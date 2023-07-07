@@ -1,7 +1,12 @@
 from stories.models import Category, Recipe
 from django.http import JsonResponse
-from stories.api.serializers import CategorySerializer, RecipeSerializer
+from stories.api.serializers import (
+    CategorySerializer, 
+    RecipeSerializer, 
+    RecipeCreateSerializer
+    )
 from rest_framework.decorators import api_view
+from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
 def categories(request):
     category_list = Category.objects.all()
@@ -18,11 +23,44 @@ def categories(request):
 @api_view(http_method_names=['GET', 'POST'])
 def recipes(request):
     if request.method == 'POST':
-        serializer = RecipeSerializer(data = request.data, context = {'request':request})
+        serializer = RecipeCreateSerializer(data = request.data, context = {'request':request})
         if serializer.is_valid():
             serializer.save()
-            return JsonResponse(data=serializer.data, safe = False)
-        return JsonResponse(data=serializer.errors, safe = False)
+            return JsonResponse(data=serializer.data, safe = False, status = 201)
+        return JsonResponse(data=serializer.errors, safe = False, status = 400)
     recipe_lists = Recipe.objects.all()
     serializer = RecipeSerializer(recipe_lists, context = {'request':request}, many = True)
     return JsonResponse(data=serializer.data, safe = False)
+
+
+@api_view(http_method_names=['PUT', 'PATCH'])
+def recipe_update(request, pk):
+    recipe = Recipe.objects.get(id = pk)
+    if request.method == 'PUT':
+        serializer = RecipeCreateSerializer(data = request.data, context = {'request':request}, instance = recipe)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(data=serializer.data, safe = False, status = 201)
+        return JsonResponse(data=serializer.errors, safe = False, status = 400)
+    if request.method == 'PATCH':
+        serializer = RecipeCreateSerializer(data = request.data, partial = True, context = {'request':request}, instance = recipe)
+        if serializer.is_valid():
+            serializer.save()
+            return JsonResponse(data=serializer.data, safe = False, status = 201)
+        return JsonResponse(data=serializer.errors, safe = False, status = 400)
+    
+
+class RecipeListAPIView(ListCreateAPIView):
+    # serializer_class = RecipeCreateSerializer
+    queryset = Recipe.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return RecipeSerializer
+        return RecipeCreateSerializer
+    
+
+class RecipeUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
+    serializer_class = RecipeCreateSerializer
+    queryset = Recipe.objects.all()
+
