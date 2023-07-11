@@ -40,10 +40,8 @@ class RecipeSerializer(serializers.ModelSerializer):
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
-    # category = serializers.CharField(source = 'category.title')
-    # category = CategorySerializer()
-    # tags = TagSerializer(many = True)
     slug = serializers.SlugField(read_only = True)
+    author = serializers.PrimaryKeyRelatedField(read_only = True)
     class Meta:
         model = Recipe
         fields = (
@@ -59,6 +57,10 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             'cover_image'
         )
 
+    def validate(self, attrs):
+        request = self.context['request']
+        attrs['author'] = request.user
+        return super().validate(attrs)
 
 
 

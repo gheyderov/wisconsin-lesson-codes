@@ -7,6 +7,7 @@ from stories.api.serializers import (
     )
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 def categories(request):
     category_list = Category.objects.all()
@@ -53,6 +54,7 @@ def recipe_update(request, pk):
 class RecipeListAPIView(ListCreateAPIView):
     # serializer_class = RecipeCreateSerializer
     queryset = Recipe.objects.all()
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
