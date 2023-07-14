@@ -52,6 +52,9 @@ def recipe_update(request, pk):
     
 
 class RecipeListAPIView(ListCreateAPIView):
+    '''
+        RecipeList
+    '''
     # serializer_class = RecipeCreateSerializer
     queryset = Recipe.objects.all()
     permission_classes = (IsAuthenticatedOrReadOnly, )
