@@ -1,9 +1,10 @@
-from stories.models import Category, Recipe
+from stories.models import Category, Recipe, Tag
 from django.http import JsonResponse
 from stories.api.serializers import (
     CategorySerializer, 
     RecipeSerializer, 
-    RecipeCreateSerializer
+    RecipeCreateSerializer,
+    TagSerializer
     )
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
@@ -69,3 +70,7 @@ class RecipeUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
     serializer_class = RecipeCreateSerializer
     queryset = Recipe.objects.all()
 
+
+class TagListAPIView(ListAPIView):
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()
