@@ -49,11 +49,11 @@ class ContactForm(forms.ModelForm):
         value = self.cleaned_data['name']
         return value.lower()
     
-    def clean(self):
-        value = self.cleaned_data['email']
-        if not value.endswith('gmail.com'):
-            raise forms.ValidationError('Email must be gmail')
-        return super().clean()
+    # def clean(self):
+    #     value = self.cleaned_data['email']
+    #     if not value.endswith('gmail.com'):
+    #         raise forms.ValidationError('Email must be gmail')
+    #     return super().clean()
         
 
 

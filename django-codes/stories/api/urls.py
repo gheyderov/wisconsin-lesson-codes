@@ -4,6 +4,6 @@ from stories.api.views import categories, TagListAPIView, recipe_update, RecipeL
 urlpatterns = [
     path('categories/', categories, name = 'categories'),
     path('tags/', TagListAPIView.as_view(), name = 'tags'),
-    path('recipes/', RecipeListAPIView.as_view(), name = 'recipes'),
+    path('recipes/', RecipeListAPIView.as_view(), name = 'recipes_lists'),
     path('recipe/<int:pk>/', RecipeUpdateDeleteAPIView.as_view(), name = 'recipe_update')
 ]
