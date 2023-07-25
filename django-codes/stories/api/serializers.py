@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from stories.models import Category, Recipe, Tag
+from core.models import Subscriber
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -64,4 +65,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
 
 
-
+class SubscriberCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscriber
+        fields = ('email', )

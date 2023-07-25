@@ -1,10 +1,12 @@
 from stories.models import Category, Recipe, Tag
+from core.models import Subscriber
 from django.http import JsonResponse
 from stories.api.serializers import (
     CategorySerializer, 
     RecipeSerializer, 
     RecipeCreateSerializer,
-    TagSerializer
+    TagSerializer,
+    SubscriberCreateSerializer
     )
 from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView, CreateAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
@@ -74,3 +76,8 @@ class RecipeUpdateDeleteAPIView(RetrieveUpdateDestroyAPIView):
 class TagListAPIView(ListAPIView):
     serializer_class = TagSerializer
     queryset = Tag.objects.all()
+
+
+class SubscriberCreateAPIView(CreateAPIView):
+    serializer_class = SubscriberCreateSerializer
+    queryset = Subscriber.objects.all()

@@ -26,3 +26,10 @@ class Contact(AbstractModel):
 
 class BlockedIps(AbstractModel):
     ip_address = models.GenericIPAddressField()
+
+
+class Subscriber(AbstractModel):
+    email = models.EmailField('email', max_length=100, unique=True)
+
+    def __str__(self) -> str:
+        return self.email
