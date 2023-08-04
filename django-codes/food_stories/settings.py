@@ -22,12 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p*e=k9atm!y%-hi4vedpu!fmb5gu$b6^=*7epvms@%^i_xijui'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False if os.environ.get('DEBUG') else True
-
-ALLOWED_HOSTS = ['*']
+DEBUG = int(os.environ.get("DEBUG", default=1))
+PROD = not DEBUG
+SECRET_KEY = os.environ.get("SECRET_KEY", "@)1age35noee$n1(^f(u98m8s_w%lj=@(+@gh&(43@9il6%_v%")
+ALLOWED_HOSTS = ['*'] # os.environ.get("ALLOWED_HOSTS").split(" ")
 
 
 # Application definition
@@ -99,11 +97,11 @@ WSGI_APPLICATION = 'food_stories.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('POSTGRES_DB', 'stories'),
-        'USER': os.environ.get('POSTGRES_USER', 'tech'),
-        'PASSWORD' : os.environ.get('POSTGRES_PASSWORD', 12345),
-        'HOST': os.environ.get('POSTGRES_HOST', 'localhost'),
+        'NAME': os.environ.get('POSTGRES_DB', 'db_name'),
+        'USER': os.environ.get('POSTGRES_USER', 'user_name'),
         'PORT': os.environ.get('POSTGRES_PORT', 5432),
+        'HOST': os.environ.get('POSTGRES_HOST', '5.161.121.186'),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', '123')
     }
 }
 AUTH_USER_MODEL = 'accounts.User'
@@ -202,12 +200,12 @@ MESSAGE_TAGS = {
 
 STATIC_URL = 'static/'
 
-if DEBUG:
-    STATICFILES_DIRS = [
-        BASE_DIR , 'static/'
-    ]
+if PROD:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
 else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, "static")
+    ]
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -228,3 +226,6 @@ EMAIL_PORT = 587
 
 CELERY_BROKER_URL = f"redis://{os.environ.get('REDIS_HOST', 'localhost')}:6379"
 CELERY_RESULT_BACKEND = f"redis://{os.environ.get('REDIS_HOST', 'localhost')}:6379"
+
+
+CSRF_TRUSTED_ORIGINS=['https://*.bridgerds.com', 'https://bridgerds.com']
